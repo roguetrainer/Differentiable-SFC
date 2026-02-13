@@ -1,8 +1,8 @@
-# X7: Giraud Collapse Model - Minsky-Climate Dynamics
+# X8: Giraud Collapse Model - Minsky-Climate Dynamics
 
 ## Overview
 
-**X7** implements the **Giraud-Bovari (GEMMES) framework** as a fully differentiable PyTorch model, demonstrating how to solve **dynamic stability problems** and navigate **collapse basins** using differentiable programming.
+**X8** implements the **Giraud-Bovari (GEMMES) framework** as a fully differentiable PyTorch model, demonstrating how to solve **dynamic stability problems** and navigate **collapse basins** using differentiable programming.
 
 This is the "Advanced Class" demonstration - a step beyond equilibrium analysis into **phase transitions and catastrophic breakdown**.
 
@@ -127,7 +127,7 @@ This is Giraud's theoretical prediction, now **discovered mathematically** via g
 ### Basic Usage
 
 ```bash
-cd experiments/X7_giraud_collapse_model
+cd experiments/X8_giraud_collapse_model
 python giraud_model.py
 ```
 
@@ -245,4 +245,4 @@ lending_capacity = f(bank_capital, NPL_ratio)
 
 **Author:** Claude (Haiku 4.5)
 **Date:** 2026-02-13
-**Framework:** Differentiable SFC Experiments X1-X7
+**Framework:** Differentiable SFC Experiments X1-X8
