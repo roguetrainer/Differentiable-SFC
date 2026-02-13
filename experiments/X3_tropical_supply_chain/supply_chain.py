@@ -55,7 +55,7 @@ class TropicalSupplyChain(nn.Module):
 
         # Learnable buffer parameters (logits for sigmoid)
         # Initialized at -5.0 (sigmoid ≈ 0.007) to start with minimal buffers
-        self.buffers = nn.Parameter(torch.full((1, 4), -5.0))
+        self.register_parameter('buffer_logits', nn.Parameter(torch.full((1, 4), -5.0)))
 
     def soft_min(self, x, dim=-1):
         """
@@ -97,7 +97,7 @@ class TropicalSupplyChain(nn.Module):
         # Add buffers to shock resilience
         # Sigmoid ensures buffers are in [0, 1] range
         effective_capacity = torch.clamp(
-            shocks + torch.sigmoid(self.buffers),
+            shocks + torch.sigmoid(self.buffer_logits),
             0.0, 1.0
         )
 
@@ -159,7 +159,7 @@ def run_experiment():
     losses = []
     buffer_evolution = []
 
-    print(f"Initial buffer values: {torch.sigmoid(model.buffers).detach().numpy().flatten()}")
+    print(f"Initial buffer values: {torch.sigmoid(model.buffer_logits).detach().numpy().flatten()}")
     print()
     print("Running optimization...")
     print()
@@ -174,7 +174,7 @@ def run_experiment():
 
         # Loss function: (1) Hit target, (2) Minimize buffer cost
         loss_target_miss = (customer_output - target_customer_output) ** 2
-        loss_buffer_cost = 0.01 * torch.sum(torch.sigmoid(model.buffers))
+        loss_buffer_cost = 0.01 * torch.sum(torch.sigmoid(model.buffer_logits))
 
         total_loss = loss_target_miss + loss_buffer_cost
 
@@ -184,7 +184,7 @@ def run_experiment():
 
         # Tracking
         losses.append(total_loss.item())
-        buffer_evolution.append(torch.sigmoid(model.buffers).detach().numpy().flatten())
+        buffer_evolution.append(torch.sigmoid(model.buffer_logits).detach().numpy().flatten())
 
         if epoch % 50 == 0:
             print(
@@ -200,7 +200,7 @@ def run_experiment():
     print()
 
     # Final buffer allocation
-    final_buffers = torch.sigmoid(model.buffers).detach().numpy().flatten()
+    final_buffers = torch.sigmoid(model.buffer_logits).detach().numpy().flatten()
     nodes = ["Source", "Factory", "Distributor", "Customer"]
     total_buffer = sum(final_buffers)
 
@@ -252,7 +252,8 @@ def run_experiment():
     axes[1].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig('experiments/X3_tropical_supply_chain/tropical_supply_chain.png', dpi=150, bbox_inches='tight')
+    print("\n✓ Plot saved to: experiments/X3_tropical_supply_chain/tropical_supply_chain.png")
 
     print("=" * 70)
 

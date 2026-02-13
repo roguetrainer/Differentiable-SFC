@@ -1,0 +1,97 @@
+
+================================================================================
+STELLA MODEL INVENTORY
+================================================================================
+
+
+────────────────────────────STOCKS (State Variables)────────────────────────────
+
+
+─────────────────────────────FLOWS (Rate Variables)─────────────────────────────
+
+
+────────────────────────────AUXILIARIES (Converters)────────────────────────────
+
+Target Capital Output\nRatio
+  Python Name: Target_Capital_Output_nRatio
+  Equation:    2.8
+  CSV Value:   N/A (Calculated)
+
+Initial Other Revenue\nfrom Exog Sources $17m
+  Python Name: Initial_Other_Revenue_nfrom_Exog_Sources_17m
+  Equation:    511530
+  CSV Value:   N/A (Calculated)
+
+Change in\nOther Factors
+  Python Name: Change_in_nOther_Factors
+  Equation:    .0075
+  CSV Value:   N/A (Calculated)
+
+Depreciation Rate Business Non Res
+  Python Name: Depreciation_Rate_Business_Non_Res
+  Equation:    .059
+  CSV Value:   N/A (Calculated)
+
+POPN AND LABOUR\nFORCE SELECTOR
+  Python Name: POPN_AND_LABOUR_nFORCE_SELECTOR
+  Equation:    2
+  CSV Value:   N/A (Calculated)
+
+Frictional\nunemployment
+  Python Name: Frictional_nunemployment
+  Equation:    .05
+  CSV Value:   N/A (Calculated)
+
+UPPER TRIGGER
+  Python Name: UPPER_TRIGGER
+  Equation:    .60
+  CSV Value:   N/A (Calculated)
+
+Duration of transition to balanced trade
+  Python Name: Duration_of_transition_to_balanced_trade
+  Equation:    3
+  CSV Value:   N/A (Calculated)
+
+Converter 1
+  Python Name: Converter_1
+  Equation:    
+  CSV Value:   N/A (Calculated)
+
+Converter 3
+  Python Name: Converter_3
+  Equation:    
+  CSV Value:   N/A (Calculated)
+
+CC Injection\nGov Cons\n$m per % Unempl
+  Python Name: CC_Injection_nGov_Cons_nm_per_Unempl
+  Equation:    5000
+  CSV Value:   N/A (Calculated)
+
+CC Injection\nGov Inv\n$m per % Unempl
+  Python Name: CC_Injection_nGov_Inv_nm_per_Unempl
+  Equation:    2500
+  CSV Value:   N/A (Calculated)
+
+CC init dampener tolerance
+  Python Name: CC_init_dampener_tolerance
+  Equation:    10
+  CSV Value:   N/A (Calculated)
+
+Averaging Time
+  Python Name: Averaging_Time
+  Equation:    1
+  CSV Value:   N/A (Calculated)
+
+CC Reduction Adj
+  Python Name: CC_Reduction_Adj
+  Equation:    1
+  CSV Value:   N/A (Calculated)
+
+
+────────────────────────────────────SUMMARY─────────────────────────────────────
+Total Variables:  20
+  - Stocks:       0
+  - Flows:        0
+  - Auxiliaries:  15
+CSV Parameters:   0
+Unmapped Vars:    20
