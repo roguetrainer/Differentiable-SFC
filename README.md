@@ -26,11 +26,24 @@ Differentiable-SFC/
 │   ├── P1_differentiable_sfc/          # Bridging SD & Deep Learning
 │   ├── P2_differentiable_economics_framework/  # Unified Framework
 │   └── README.md           # Papers index
-├── experiments/             # Proof-of-concept implementations
-│   ├── X1_differentiable_sim_pytorch/  # SIM model optimization
-│   ├── X2_differentiable_io_leontief/  # IO models + climate
-│   └── ...
-├── notes/                   # Research notes and drafts
+├── experiments/             # Proof-of-concept implementations (X1-X8)
+│   ├── X1_differentiable_sim_pytorch/
+│   ├── X2_differentiable_io_leontief/
+│   ├── X3_tropical_supply_chain/
+│   ├── X4_green_sfc_climate/
+│   ├── X5_stimulus_trigger_annealing/
+│   ├── X6_lowgrow_differentiable_conversion/
+│   ├── X7_goodwin_volterra_control/
+│   ├── X8_giraud_collapse_model/
+│   └── README.md           # Experiments index
+├── notebooks/               # Jupyter notebooks
+│   └── GEMMES_X7_X8_differential_control.ipynb
+├── notes/                   # Research notes and theoretical foundations
+│   ├── Introduction_to_MGE_TTC.md
+│   ├── variable_beta_thermodynamic_approach.md
+│   ├── differentiable_green_sfc_architecture.md
+│   ├── differentiable_define_model.md
+│   └── README.md           # Notes index
 ├── _private/                # Private notes (symlinked to OneDrive)
 └── README.md               # This file
 ```
@@ -62,43 +75,71 @@ Advocates for differentiable programming across diverse economic models. Include
 - Thermodynamic tensor methods and variable temperature ($\beta$) approaches
 - Vision for differentiable national accounts and "policy cockpits"
 
-## Experiments
+## Experiments (X1-X8): Progressive Complexity
+
+The experiments demonstrate a **progressive arc** from simple macroeconomic models to coupled climate-economic collapse dynamics, all implemented as differentiable programs.
 
 ### [X1: Differentiable SIM Model (PyTorch)](experiments/X1_differentiable_sim_pytorch/)
 
-Implements the classic Service-Induced Macroeconomic (SIM) model as a differentiable program in PyTorch. Demonstrates policy optimization: using backpropagation to find the tax rate that minimizes economic volatility and unemployment.
+Classic Service-Induced Macroeconomic (SIM) model as a differentiable program. Demonstrates policy optimization using backpropagation to find tax rates that minimize volatility.
 
-**Key Features:**
-- `SIM_Model` class with learnable behavioral parameters
-- Multi-objective loss function (GDP targeting + volatility minimization + financial stability)
-- Adam optimizer for policy discovery
-- Automatic solution to the "oscillation problem"
-
-**Usage:**
-```bash
-cd experiments/X1_differentiable_sim_pytorch
-python sim_model.py
-```
+**Key Features:** Learnable behavioral parameters, multi-objective loss, policy discovery via gradients
 
 ### [X2: Differentiable Input-Output (Leontief) Models](experiments/X2_differentiable_io_leontief/)
 
-Transforms static Input-Output tables into dynamic, learnable systems. Two implementations:
+Two implementations: inverse I-O calibration and climate-integrated Leontief with damage feedback and tipping points.
 
-**io_model.py:** Solves the "Inverse I-O Problem"—given observed sectoral outputs and final demand, learns the technical coefficients matrix through gradient descent.
+**Key Features:** Technical coefficient learning, climate damage functions, stress testing
 
-**io_model_climate.py:** Extends the Leontief model with climate damage feedback. Models how non-linear temperature effects reduce sectoral efficiency, leading to economic collapse at tipping points. Computes $\frac{\partial \text{GDP}}{\partial T}$ exactly.
+### [X3: Tropical Supply Chain (Min-Plus Algebra)](experiments/X3_tropical_supply_chain/)
 
-**Key Features:**
-- Differentiable Leontief solution: $x = (I - A)^{-1} d$
-- Automatic calibration of technical coefficients from data
-- Climate damage function with tipping point dynamics
-- Stress testing across temperature scenarios
+Differentiable bottleneck modeling using tropical (min-plus) semiring. Optimizes buffer allocations to minimize supply disruption under production constraints.
 
-**Usage:**
+**Key Features:** Soft-min via LogSumExp, supply chain resilience, learnable buffers
+
+### [X4: Green-SFC Climate Integration](experiments/X4_green_sfc_climate/)
+
+Three-layer SFC model: physical (climate), structural (productivity), financial (debt). Climate damage reduces capital efficiency; optimizer discovers green investment policies.
+
+**Key Features:** Climate-economic coupling, endogenous productivity, multi-objective optimization
+
+### [X5: Stimulus Trigger with Variable β-Annealing](experiments/X5_stimulus_trigger_annealing/)
+
+Introduces **Maslov-Gibbs Einsum (MGE)**: soft sigmoid triggers controlled by β (inverse temperature) that gradually sharpen during optimization.
+
+**Key Features:** β-annealing schedule, differentiable policy triggers, escape from discrete IF/THEN logic
+
+### [X6: LowGrow-SFC Differentiable Conversion](experiments/X6_lowgrow_differentiable_conversion/)
+
+Extracts 1524 variables from real Stella model (LowGrow), converts to PyTorch, implements differentiable SFC with 158 stocks, 224 flows, and 1342 auxiliaries.
+
+**Key Features:** Real model extraction, large-scale differentiable macroeconomic system, automated variable parsing
+
+### [X7: Goodwin-Volterra Cycle - Optimal Control](experiments/X7_goodwin_volterra_control/)
+
+**Pedagogical foundation:** Simplest continuous limit cycle in economics (2 variables: employment vs. wage share). Demonstrates that gradient descent discovers optimal policy damping (78.9% variance reduction).
+
+**Key Features:** Lotka-Volterra predator-prey dynamics, policy dampening via learned parameter, phase portrait visualization
+
+**Why it matters:** Bridge between simple oscillations and complex collapse dynamics; shows how differentiability enables "taming the cycle."
+
+### [X8: Giraud Collapse Model - Phase Transitions](experiments/X8_giraud_collapse_model/)
+
+**Advanced capstone:** Five-variable GEMMES model with three coupled feedback loops (climate-economic coupling, Keen-Minsky investment, debt-solvency crisis). Uses β-annealing to navigate collapse basins.
+
+**Key Features:** Multiple feedback loops, "Obsidian Snap" phase transition, "safety corridor" discovery (optimal investment rate at edge of collapse)
+
+**Why it matters:** Demonstrates that stable growth sits on a knife's edge; differentiability enables discovery of policies navigating toward sustainability.
+
+### Quick Run All Experiments
+
 ```bash
-cd experiments/X2_differentiable_io_leontief
-python io_model.py              # Basic IO calibration
-python io_model_climate.py      # Climate damage analysis
+# Run experiments in order (X1-X8)
+for dir in experiments/X{1..8}_*/; do
+  cd "$dir"
+  python *.py
+  cd ../..
+done
 ```
 
 ## Quick Start
@@ -111,28 +152,54 @@ pip install torch numpy matplotlib
 
 Optional (for advanced experiments):
 ```bash
-pip install jax tensorflow
+pip install jax tensorflow pandas
 ```
 
-### Run the First Experiment
+### Run Individual Experiments
+
+Start with X1 (simplest) and progress to X8 (most complex):
+
+#### X1: SIM Model
 
 ```bash
 cd experiments/X1_differentiable_sim_pytorch
 python sim_model.py
 ```
 
-This will:
-1. Initialize a SIM model with behavioral parameters
-2. Run 200 epochs of policy optimization
-3. Display the optimized tax rate and stability metrics
-4. Plot GDP and wealth trajectories
-
-### Run the IO Experiment
+#### X2: IO with Climate
 
 ```bash
 cd experiments/X2_differentiable_io_leontief
-python io_model.py              # Calibration example
-python io_model_climate.py      # Climate risk analysis
+python io_model_climate.py
+```
+
+#### X3: Supply Chain (Tropical Algebra)
+
+```bash
+cd experiments/X3_tropical_supply_chain
+python supply_chain.py
+```
+
+#### X7: Goodwin-Volterra (Limit Cycles)
+
+```bash
+cd experiments/X7_goodwin_volterra_control
+python goodwin_model.py
+```
+
+#### X8: Giraud Collapse (Phase Transitions)
+
+```bash
+cd experiments/X8_giraud_collapse_model
+python giraud_model.py
+```
+
+### Run the GEMMES Notebook
+
+Comprehensive walkthrough of X7 and X8 with MGE/TTC framework explanation:
+
+```bash
+jupyter notebook notebooks/GEMMES_X7_X8_differential_control.ipynb
 ```
 
 ## Key Concepts
