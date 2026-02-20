@@ -69,7 +69,17 @@ else:
 
 The **Maslov-Gibbs approximation** replaces discrete logic with a sigmoid:
 
-**Default Probability (Financial Crisis Example):**
+**Universal TTC Operator (Paper 31):**
+
+$$Y_j = \frac{1}{\zeta} \log \left( \sum_i \exp(\zeta \cdot (W_{ij} + X_i)) \right)$$
+
+Where:
+
+* **ζ = β + iγ** = Complex tropical number (β: inverse temperature, γ: topological phase)
+* **W, X** = Input weights and values
+* **Log-Sum-Exp** = Unique operator bridging arithmetic (+,×) and tropical (max,+) semirings
+
+**Application: Default Probability (Financial Crisis Example):**
 
 ```
 P_d(x, β) = σ(β · (x - threshold))
@@ -81,7 +91,7 @@ Where:
 * **x** = trigger variable (e.g., debt-service ratio, unemployment rate)
 * **threshold** = critical value where system transitions
 * **β** = inverse temperature (controls sharpness)
-* **σ(·)** = sigmoid function
+* **σ(·)** = sigmoid function (special case of TTC)
 
 ### General MGE Soft-Min Formula (Tropical Semi-ring)
 
