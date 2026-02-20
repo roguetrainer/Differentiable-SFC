@@ -50,6 +50,125 @@ The variable β is the "Inverse Temperature" (1/T) of the model's logic. By adju
 * **High β (Low Temperature / "Frozen Logic"):** As β increases, the curves sharpen. The "fuzzy" average settles back into a strict "Min" or a hard "If/Then" rule.
   * *Benefit:* This represents the real-world "Hard Logic" of accounting and physical constraints.
 
+## 5. The MGE Formula: Soft-Min via Sigmoid
+
+The core mathematical operation of MGE-TTC is the **soft minimum** function, which approximates discrete logic using a sigmoid (temperature-controlled).
+
+### Discrete Hard Trigger (Non-Differentiable)
+
+```python
+if (x > threshold):
+    output = 1
+else:
+    output = 0
+```
+
+**Problem:** Zero gradient almost everywhere; infinite gradient at kink. Backpropagation fails.
+
+### Differentiable Soft-Min via Sigmoid (MGE Formula)
+
+The **Maslov-Gibbs approximation** replaces discrete logic with a sigmoid:
+
+**Default Probability (Financial Crisis Example):**
+
+```
+P_d(x, β) = σ(β · (x - threshold))
+          = 1 / (1 + exp(-β · (x - threshold)))
+```
+
+Where:
+
+* **x** = trigger variable (e.g., debt-service ratio, unemployment rate)
+* **threshold** = critical value where system transitions
+* **β** = inverse temperature (controls sharpness)
+* **σ(·)** = sigmoid function
+
+### General MGE Soft-Min Formula (Tropical Semi-ring)
+
+For multiple competing constraints (bottlenecks), the soft minimum is:
+
+```
+soft_min_β(x₁, x₂, ..., xₙ) = -1/β · log(∑ᵢ exp(-β · xᵢ))
+```
+
+This is the **LogSumExp trick** from machine learning. As β → ∞, it converges to the true minimum:
+
+```
+lim (β→∞) soft_min_β(x₁, x₂, ..., xₙ) = min(x₁, x₂, ..., xₙ)
+```
+
+### β-Annealing Schedule
+
+Optimization typically uses a schedule where β increases over epochs:
+
+```
+β(epoch) = β₀ · (1 + epoch / τ)^α
+```
+
+* **Early epochs:** Low β (e.g., β=1): Fuzzy, smooth gradients
+* **Late epochs:** High β (e.g., β=100): Sharp, discrete-like behavior
+* **Effect:** Start exploring broadly, then refine to actual critical points
+
+### Key Properties of MGE
+
+| Property | Hard Logic | MGE-TTC Sigmoid |
+| --- | --- | --- |
+| **Differentiable** | ✗ | ✓ |
+| **Gradient Signal** | None (flat/cliff) | Smooth everywhere |
+| **Limit β→∞** | N/A | Recovers true logic |
+| **Allows Backprop** | ✗ | ✓ |
+| **Annealing** | N/A | β(epoch) schedule |
+
+### Implementation Example
+
+```python
+import torch
+import torch.nn as nn
+
+def sigmoid_trigger(x, threshold, beta=10.0):
+    """
+    Soft-threshold policy trigger (MGE formula).
+
+    Args:
+        x: Trigger variable (e.g., unemployment rate)
+        threshold: Critical value
+        beta: Inverse temperature (sharpness)
+
+    Returns:
+        Differentiable probability in [0, 1]
+    """
+    return torch.sigmoid(beta * (x - threshold))
+
+def soft_min(values, beta=10.0):
+    """
+    Soft minimum via LogSumExp (tropical semi-ring).
+
+    Args:
+        values: Tensor of competing constraints
+        beta: Inverse temperature
+
+    Returns:
+        Soft minimum (differentiable bottleneck)
+    """
+    return -torch.logsumexp(-beta * values, dim=-1) / beta
+
+def mge_annealing_schedule(epoch, beta0=1.0, final_beta=100.0, total_epochs=150):
+    """
+    β-annealing: Start fuzzy, gradually sharpen.
+    """
+    progress = min(epoch / total_epochs, 1.0)
+    return beta0 + (final_beta - beta0) * progress
+```
+
+### Connection to Physical Theory
+
+The formula comes from **statistical mechanics**:
+
+* In statistical mechanics, β = 1/(k_B·T) where k_B is Boltzmann's constant
+* At high temperature (low β): System explores many states (high entropy)
+* At low temperature (high β): System settles into ground state (low entropy)
+* **Economic parallel:** High-β systems exhibit sharp phase transitions (like debt collapse)
+
 ## 5. Summary
 
 MGE-TTC turns a **search** problem (finding a needle in a haystack of discrete rules) into a **navigation** problem (walking down a hill toward the best possible outcome). The interpolation between semi-rings via β is what allows us to model a world that is both an accounting ledger and a physical machine.
